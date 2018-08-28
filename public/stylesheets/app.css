@@ -1,3 +1,12 @@
+@font-face {
+	font-family: "IBMPlexSerif-Light";
+	src: url("../fonts/IBMPlexSerif-Light.ttf");
+}
+
+#fontStyle {
+	font-family: 'IBMPlexSerif-Light', Arial, sans-serif;			
+}
+
 i.icon {
   font-size: 2em;
 }
@@ -8,4 +17,15 @@ i.icon {
 
 #delete {
   display: inline;
+}
+
+.logo {
+  width: 70px;
+  height: 70px;
+  margin-right: -20px;
+}
+
+#theme-color {
+  font-size: 1.4em;
+  color: #523A66;
 }
