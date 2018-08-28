@@ -11,7 +11,7 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 
 // connecting mongoose to DB
-mongoose.connect('mongodb://localhost:27017/restful_blog_app', { useNewUrlParser: true });
+// mongoose.connect('mongodb://localhost:27017/restful_blog_app', { useNewUrlParser: true });
 
 mongoose.Promise = global.Promise;
 
