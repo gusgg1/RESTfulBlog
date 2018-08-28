@@ -11,10 +11,6 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 
 // connecting mongoose to DB
-// mongoose.connect('mongodb://localhost:27017/restful_blog_app', { useNewUrlParser: true });
-// mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
-
-
 mongoose.Promise = global.Promise;
 
 const databaseUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/restful_blog_app';
@@ -22,7 +18,6 @@ const databaseUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/restfu
 mongoose.connect(databaseUri, { useNewUrlParser: true })
   .then(() => console.log("DB connected"))
   .catch(err => console.log(`DB connection error: ${err.message}`));
-
 
 
 // setting up the view engine with ejs
@@ -38,8 +33,7 @@ app.use(expressSanitizer());
   // We can always det up a default value in our Schema, for example in case the user does not provide an image.
 const blogSchema = new mongoose.Schema({
   title: String,
-  // image: {type: String, default: "placeholderimage.jpg"}
-  image: String,
+  image: {type: String, default: "/assets/default.jpg"},
   body: String,
   created: {type: Date, default: Date.now}
 });
@@ -47,11 +41,6 @@ const blogSchema = new mongoose.Schema({
 // Compiling our model
 const Blog = mongoose.model("Blog", blogSchema);
 
-// Blog.create({
-//   title: "Test Blog",
-//   image: "https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=fd0a9edabe9fd24d887dd3665be3268e&auto=format&fit=crop&w=500&q=60",
-//   body: "Hello this is a blog post"
-// });
 
 // RESTFUL ROUTES:
 app.get("/", function(req, res) {
@@ -81,7 +70,10 @@ app.post("/blogs", function(req, res) {
   req.body.blog.body = req.sanitize(req.body.blog.body);
   console.log("=============");
   console.log(req.body);
-
+  // if user does not provide url we use default image for blog post
+  if (req.body.blog.image === '') {
+    req.body.blog.image = blogSchema.tree.image.default;
+  }
   Blog.create(req.body.blog, function(err, newBlog) {
     if (err) {
       res.render("new");
@@ -116,7 +108,6 @@ app.get("/blogs/:id/edit", function(req, res) {
 
 // UPDATE ROUTE
 app.put("/blogs/:id" ,function(req, res) {
-
   // Here we remove any script tags in the body / description with sanitizer
   req.body.blog.body = req.sanitize(req.body.blog.body);
 
@@ -132,7 +123,7 @@ app.put("/blogs/:id" ,function(req, res) {
 
 // DELETE ROUTE
 app.delete("/blogs/:id", function(req, res) {
-  Blog.findOneAndRemove(req.params.id, function(err) {
+  Blog.findByIdAndRemove(req.params.id, function(err) {
     if (err) {
       res.redirect("/blogs");
     } else {
