@@ -128,6 +128,7 @@ app.delete("/blogs/:id", function(req, res) {
 });
 
 
-app.listen(3000, function() {
-  console.log("blog server running on port 3000");
+const port = process.env.PORT || 3000;
+app.listen(port, function() {
+  console.log("running on port 3000");
 });
