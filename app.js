@@ -12,10 +12,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 // connecting mongoose to DB
 // mongoose.connect('mongodb://localhost:27017/restful_blog_app', { useNewUrlParser: true });
+// mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 
-/*
 mongoose.Promise = global.Promise;
 
 const databaseUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/restful_blog_app';
@@ -23,7 +22,7 @@ const databaseUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/restfu
 mongoose.connect(databaseUri, { useNewUrlParser: true })
   .then(() => console.log("DB connected"))
   .catch(err => console.log(`DB connection error: ${err.message}`));
-*/
+
 
 
 // setting up the view engine with ejs
