@@ -9,8 +9,19 @@ const app = express();
 // APP CONFIG:
 // setting up bodyParser to work
 app.use(bodyParser.urlencoded({extended: true}));
+
 // connecting mongoose to DB
 mongoose.connect('mongodb://localhost:27017/restful_blog_app', { useNewUrlParser: true });
+
+mongoose.Promise = global.Promise;
+
+const databaseUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/restful_blog_app';
+
+mongoose.connect(databaseUri, { useNewUrlParser: true })
+  .then(() => console.log("DB connected"))
+  .catch(err => console.log(`DB connection error: ${err.message}`));
+
+
 // setting up the view engine with ejs
 app.set("view engine", "ejs");
 // So we can server our custom style sheet
